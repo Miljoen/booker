@@ -1,0 +1,27 @@
+overwrite: true
+schema: http://localhost:3000/graphql
+documents: src/app/graphql/documents/*.graphql
+generates:
+  src/app/graphql/schema.graphql:
+    plugins:
+      - schema-ast
+  src/app/graphql/schema.ts:
+    hooks:
+      afterOneFileWrite:
+        - echo
+        - 'bash -vc "npx eslint --fix --no-ignore \$1 &> /dev/null; exit 0" -- '
+    plugins:
+      - add:
+          content: "// noinspection JSUnusedGlobalSymbols\n"
+      - typescript:
+          skipTypename: true
+          declarationKind: interface
+      - typescript-operations:
+          skipTypename: true
+          declarationKind: interface
+      - typescript-apollo-angular:
+          skipTypename: true
+          querySuffix: QueryService
+          mutationSuffix: MutationService
+          subscriptionSuffix: SubscriptionService
+          addExplicitOverride: true

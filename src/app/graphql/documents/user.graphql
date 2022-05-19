@@ -1,0 +1,10 @@
+query user {
+  user(id: "1") {
+    ...User
+  }
+}
+
+fragment User on User {
+  id
+  email
+}
